@@ -19,10 +19,55 @@
 # El programa debe repertirse hasta que el usuario ingrese 7 (salir).
 
 
-inventario = {"Notebooks": 4, "PC Escritorio": 6, "Routers": 10, "Impresoras": 6}
+inventario = {"Notebooks": 4, "PC_Escritorio": 6, "Routers": 10, "Impresoras": 6}
 
-opcion = 1.
-while opcion != 0
+opcion = 0
+while opcion != 7 do
+    puts "Ingrese una opción
+          1 - Agregar un item
+          2 - Eliminar un item
+          3 - Actualizar Información
+          4 - Ver Stock
+          5 - Ver item con mayor stock
+          6 - Verificar un Item
+          7 - Salir"
     opcion = gets.chomp.to_i
-    puts opcion   
+    case opcion
+        when 1 
+            puts 'Ingrese un Item y valor, separado por coma'
+            ingreso = gets.chomp.gsub(' ', '_')
+            arry1 = []
+            arry1 = ingreso.scan(/\w+/)
+            arry1[0] = arry1[0].to_sym
+            arry2 = []
+            arry2.push arry1
+            inventario = inventario.merge(arry2.to_h)
+            print  inventario
+            puts ''
+        when 2 
+            puts 'Ingrese Item a Eliminar'
+            ingreso = gets.chomp.gsub(' ', '_').to_sym
+            inventario.delete(ingreso)
+            puts inventario
+        when 3 
+            puts 'Ingresa el Item a Actualizar y su Stock'
+            ingreso = gets.chomp.gsub(' ', '_')
+            arry1 = []
+            arry1 = ingreso.scan(/\w+/)
+            arry1[0] = arry1[0].to_sym
+            arry2 = []
+            arry2.push arry1
+            
+        when 4 
+            puts '4'
+        when 5 
+            puts '5'
+        when 6 
+            puts '6'
+    end 
 end    
+
+
+
+
+
