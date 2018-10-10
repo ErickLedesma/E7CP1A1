@@ -18,55 +18,84 @@
 # responderá "Sí".
 # El programa debe repertirse hasta que el usuario ingrese 7 (salir).
 
-
+# Datos
 inventario = {"Notebooks": 4, "PC_Escritorio": 6, "Routers": 10, "Impresoras": 6}
+alternativas = [ "Agregar un item", "Eliminar un item", "Actualizar Información", "Ver Stock",
+                 "Ver item con mayor stock", "Verificar un Item", "Salir"]
+
+# Métodos   
+def solicita_opcion(alternativas)
+    opcion = 0
+    while (opcion <= 0 || opcion > alternativas.count)
+        ingreso = gets.chomp
+        if  ingreso.to_i == 0 || (ingreso.to_i - ingreso.to_f) != 0 then 
+            puts "Su opción es: #{ingreso}, debes Ingresar un entero"  
+        else opcion = ingreso.to_i
+        end 
+        if opcion <= 0 || opcion > alternativas.count
+        then puts "Opciones del 1 al #{alternativas.count}"
+        end      
+    end 
+    puts alternativas[opcion - 1]
+    return opcion 
+end     
+
+def imprime_menu(alternativas)
+    menu = ''
+    alternativas.each_with_index { |opcion, indice |
+        menu += "\n\t #{(indice + 1)} - " + opcion
+    }   
+    puts "Ingrese una opción \n" + menu
+end     
+
+def ingresa_item 
+    puts 'Ingrese un Item' 
+    ingreso = gets.chomp.gsub(' ', '_').to_sym
+end    
+
+def ingresa_item_valor 
+    puts 'Ingrese un Item y Valor, separado por coma'
+    ingreso = gets.chomp.gsub(' ', '_')
+    arry1 = []
+    arry1 = ingreso.scan(/\w+/)
+    arry1[0] = arry1[0].to_sym
+    arry2 = []
+    arry2.push arry1
+end    
+
+def verifica_item(item, inventario)
+   if !inventario.include?(item) then puts "No Existe #{item} en Inventario" end 
+end     
 
 opcion = 0
 while opcion != 7 do
-    puts "Ingrese una opción
-          1 - Agregar un item
-          2 - Eliminar un item
-          3 - Actualizar Información
-          4 - Ver Stock
-          5 - Ver item con mayor stock
-          6 - Verificar un Item
-          7 - Salir"
-    opcion = gets.chomp.to_i
+    imprime_menu(alternativas)
+
+    opcion = solicita_opcion(alternativas)
+ 
     case opcion
-        when 1 
-            puts 'Ingrese un Item y valor, separado por coma'
-            ingreso = gets.chomp.gsub(' ', '_')
-            arry1 = []
-            arry1 = ingreso.scan(/\w+/)
-            arry1[0] = arry1[0].to_sym
-            arry2 = []
-            arry2.push arry1
-            inventario = inventario.merge(arry2.to_h)
+        when 1     # Agregar un Item 
+            arry = ingresa_item_valor
+            inventario = inventario.merge(arry.to_h)
             print  inventario
             puts ''
-        when 2 
-            puts 'Ingrese Item a Eliminar'
-            ingreso = gets.chomp.gsub(' ', '_').to_sym
+        when 2     # Eliminar un Item
+            ingreso = ingresa_item
+            verifica_item(ingreso, inventario)
             inventario.delete(ingreso)
             puts inventario
-        when 3 
-            puts 'Ingresa el Item a Actualizar y su Stock'
-            ingreso = gets.chomp.gsub(' ', '_')
-            arry1 = []
-            arry1 = ingreso.scan(/\w+/)
-            arry1[0] = arry1[0].to_sym
-            arry2 = []
-            arry2.push arry1
-            
-        when 4 
+        when 3     # Actuaizar Información 
+            arry = ingresa_item_valor
+            arry2.push arry1     
+        when 4     # Ver Stock
             puts '4'
-        when 5 
+        when 5     # Ver Item con Mayor Stock
             puts '5'
-        when 6 
+        when 6     # Verificar un Item
             puts '6'
-    end 
-end    
+    end
 
+end    
 
 
 
