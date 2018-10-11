@@ -23,18 +23,28 @@ inventario = {"Notebooks": 4, "PC_Escritorio": 6, "Routers": 10, "Impresoras": 6
 alternativas = [ "Agregar un item", "Eliminar un item", "Actualizar Información", "Ver Stock",
                  "Ver item con mayor stock", "Verificar un Item", "Salir"]
 
-# Métodos   
+# Métodos  
+def verifica_entero(texto)
+    entero = true
+    if  texto.to_i == 0 || (texto.to_i - texto.to_f) != 0 
+    then  entero = false
+    end  
+    return entero
+end 
+
 def solicita_opcion(alternativas)
     opcion = 0
     while (opcion <= 0 || opcion > alternativas.count)
         ingreso = gets.chomp
-        if  ingreso.to_i == 0 || (ingreso.to_i - ingreso.to_f) != 0 then 
-            puts "Su opción es: #{ingreso}, debes Ingresar un entero"  
-        else opcion = ingreso.to_i
-        end 
-        if opcion <= 0 || opcion > alternativas.count
-        then puts "Opciones del 1 al #{alternativas.count}"
-        end      
+        entero = verifica_entero(ingreso)
+        if !entero then
+            puts "Su opción es: #{ingreso}, debes Ingresar un entero"
+        elsif
+            opcion = ingreso.to_i
+            if opcion <= 0 || opcion > alternativas.count
+            then puts "Opciones del 1 al #{alternativas.count}"
+            end
+        end          
     end 
     puts alternativas[opcion - 1]
     return opcion 
@@ -45,7 +55,7 @@ def imprime_menu(alternativas)
     alternativas.each_with_index { |opcion, indice |
         menu += "\n\t #{(indice + 1)} - " + opcion
     }   
-    puts "Ingrese una opción \n" + menu
+    puts "\nIngrese una opción \n" + menu
 end     
 
 def ingresa_item 
@@ -53,18 +63,18 @@ def ingresa_item
     ingreso = gets.chomp.gsub(' ', '_').to_sym
 end    
 
-def ingresa_item_valor 
+def ingresa_item_valor
     puts 'Ingrese un Item y Valor, separado por coma'
     ingreso = gets.chomp.gsub(' ', '_')
-    arry1 = []
-    arry1 = ingreso.scan(/\w+/)
-    arry1[0] = arry1[0].to_sym
-    arry2 = []
-    arry2.push arry1
+    arry = []
+    arry = ingreso.scan(/\w+/)
+    arry[0] = arry[0].to_sym
+    return arry
 end    
 
 def verifica_item(item, inventario)
    if !inventario.include?(item) then puts "No Existe #{item} en Inventario" end 
+   return inventario.include?(item) 
 end     
 
 opcion = 0
@@ -75,24 +85,50 @@ while opcion != 7 do
  
     case opcion
         when 1     # Agregar un Item 
-            arry = ingresa_item_valor
-            inventario = inventario.merge(arry.to_h)
-            print  inventario
-            puts ''
+            arr_ingreso = ingresa_item_valor
+            if verifica_entero(arr_ingreso[1])
+            then 
+                arr_pre_hash = []
+                arr_pre_hash.push(arr_ingreso)
+                print arr_pre_hash
+                inventario = inventario.merge(arr_pre_hash.to_h)
+                print  inventario
+            elsif puts "#{arr_ingreso[1]} No es un entero"
+            end     
         when 2     # Eliminar un Item
             ingreso = ingresa_item
-            verifica_item(ingreso, inventario)
-            inventario.delete(ingreso)
+            if verifica_item(ingreso, inventario) then 
+                inventario.delete(ingreso)
+            end 
             puts inventario
         when 3     # Actuaizar Información 
-            arry = ingresa_item_valor
-            arry2.push arry1     
+            arr_ingreso = ingresa_item_valor
+            if verifica_item(arr_ingreso[0], inventario) then 
+                entero = verifica_entero(arr_ingreso[1])
+                if entero && arr_ingreso[1].to_i != 0 then 
+                    print arr_ingreso
+                elsif puts " #{arr_ingreso[1]} No es un Entero "
+                end 
+            end             
         when 4     # Ver Stock
-            puts '4'
+            puts inventario.inject(0) { |suma, (key, value)| suma += value }
         when 5     # Ver Item con Mayor Stock
-            puts '5'
+            mayor_item = ''
+            mayor_inventario = 0
+            inventario.each do |key, value|  
+                if value > mayor_inventario 
+                then mayor_item = key
+                     mayor_inventario = value
+                end
+            end     
+            puts "El Item #{mayor_item} tiene el mayor inventario con #{mayor_inventario} unidades"
         when 6     # Verificar un Item
-            puts '6'
+            ingreso = ingresa_item
+            if verifica_item(ingreso, inventario) then
+                puts " #{ingreso} Existe en el Inventario"
+            elsif
+                puts " #{ingreso} NO Existe"     
+            end 
     end
 
 end    
