@@ -88,6 +88,7 @@ while opcion != 7 do
             arr_ingreso = ingresa_item_valor
             if verifica_entero(arr_ingreso[1])
             then 
+                arr_ingreso[1] = arr_ingreso[1].to_i
                 arr_pre_hash = []
                 arr_pre_hash.push(arr_ingreso)
                 print arr_pre_hash
@@ -101,11 +102,11 @@ while opcion != 7 do
                 inventario.delete(ingreso)
             end 
             puts inventario
-        when 3     # Actuaizar Información 
+        when 3     # Actualizar Información 
             arr_ingreso = ingresa_item_valor
             if verifica_item(arr_ingreso[0], inventario) then 
                 entero = verifica_entero(arr_ingreso[1])
-                if entero && arr_ingreso[1].to_i != 0 then 
+                if !entero && arr_ingreso[1].to_i != 0 then 
                     print arr_ingreso
                 elsif puts " #{arr_ingreso[1]} No es un Entero "
                 end 
