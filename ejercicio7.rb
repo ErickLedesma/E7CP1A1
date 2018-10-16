@@ -89,10 +89,12 @@ while opcion != 7 do
             if verifica_entero(arr_ingreso[1])
             then 
                 arr_ingreso[1] = arr_ingreso[1].to_i
-                arr_pre_hash = []
-                arr_pre_hash.push(arr_ingreso)
-                print arr_pre_hash
-                inventario = inventario.merge(arr_pre_hash.to_h)
+                if verifica_item(arr_ingreso[0], inventario)
+                    inventario[arr_ingreso[0]] += arr_ingreso[1]
+                else arr_pre_hash = []
+                      arr_pre_hash.push(arr_ingreso)
+                      inventario = inventario.merge(arr_pre_hash.to_h)
+                end 
                 print  inventario
             elsif puts "#{arr_ingreso[1]} No es un entero"
             end     
@@ -104,9 +106,9 @@ while opcion != 7 do
             puts inventario
         when 3     # Actualizar Información 
             arr_ingreso = ingresa_item_valor
-            if verifica_item(arr_ingreso[0], inventario) then 
+            if verifica_item(arr_ingreso[0], inventario)  
                 entero = verifica_entero(arr_ingreso[1])
-                if !entero && arr_ingreso[1].to_i != 0 then 
+                if !entero && arr_ingreso[1].to_i != 0  
                     print arr_ingreso
                 elsif puts " #{arr_ingreso[1]} No es un Entero "
                 end 
@@ -116,13 +118,29 @@ while opcion != 7 do
         when 5     # Ver Item con Mayor Stock
             mayor_item = ''
             mayor_inventario = 0
+            i = 0
             inventario.each do |key, value|  
                 if value > mayor_inventario 
-                then mayor_item = key
-                     mayor_inventario = value
+                then mayor_inventario = value
+                     mayor_item = key.to_s.gsub('_',' ')
                 end
             end     
-            puts "El Item #{mayor_item} tiene el mayor inventario con #{mayor_inventario} unidades"
+            inventario.each do |key, value|  
+                if value == mayor_inventario 
+                then i += 1
+                end
+            end     
+
+            if i == 1 
+                puts "El Item #{mayor_item} tiene el mayor inventario con #{mayor_inventario} unidades"
+            else
+                puts "Los Items con mayor inventario, de #{mayor_inventario} unidades son: " 
+                inventario.each do |key, value|  
+                    if value == mayor_inventario
+                       puts key
+                    end
+                end         
+            end 
         when 6     # Verificar un Item
             ingreso = ingresa_item
             if verifica_item(ingreso, inventario) then
